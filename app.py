@@ -23,7 +23,7 @@ st.markdown("""
     width: 100%;
     background-color: #6C63FF;
     color: white;
-    border-radius: 10px;
+    border-radius: 12px;
     height: 50px;
     font-size: 18px;
     font-weight: bold;
@@ -38,12 +38,12 @@ div[data-testid="stTextInput"] input {
     border-radius: 10px;
 }
 
-div[data-testid="stSelectbox"] {
-    border-radius: 10px;
-}
-
 .block-container {
     padding-top: 2rem;
+}
+
+footer {
+    visibility: hidden;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -64,34 +64,53 @@ with st.sidebar:
     st.markdown("---")
 
     st.write("### 🌟 Features")
-    st.write("✅ Explain Concepts")
-    st.write("✅ Real-Life Examples")
-    st.write("✅ Quiz Generation")
-    st.write("✅ Ask Anything")
+    st.write("📘 Explain Concepts")
+    st.write("💼 Real-Life Examples")
+    st.write("📝 Generate Quiz")
+    st.write("💬 Ask Anything")
 
     st.markdown("---")
 
     st.info(
-        "💜 Dhanya is your friendly AI companion for learning HR, Analytics, "
-        "Interview Preparation, Resume Tips, and Career Guidance."
+        "💜 Dhanya helps you learn HR, Analytics, Business Concepts, Interview Preparation, Resume Tips, and Career Guidance."
     )
+
+    st.markdown("---")
+
+    st.write("### ℹ️ Version")
+    st.write("Version 1.0")
+
+    st.caption("Made with ❤️ using Streamlit & Gemini AI")
 
 # -------------------------
 # MAIN PAGE
 # -------------------------
 st.title("🤖 Dhanya – Your Friendly AI HR & Analytics Companion")
 
-st.success("👋 Welcome! Ask me anything about HR, Analytics, Business, Interviews, or Career Guidance.")
+st.success("👋 Welcome! I'm Dhanya, your AI learning companion.")
+
+st.info("""
+### 💡 Try asking:
+- HR Analytics
+- Recruitment Process
+- SQL Joins
+- Power BI Dashboard
+- Employee Attrition
+- Resume Tips
+- Interview Preparation
+""")
 
 st.markdown("---")
 
-# Two-column layout
+# -------------------------
+# INPUT SECTION
+# -------------------------
 col1, col2 = st.columns(2)
 
 with col1:
     topic = st.text_input(
         "📘 Enter a Topic",
-        placeholder="Example: Recruitment, HR Analytics, SQL..."
+        placeholder="Example: HR Analytics, SQL, Power BI, Recruitment..."
     )
 
 with col2:
@@ -105,8 +124,12 @@ with col2:
         ]
     )
 
-# Generate button
-if st.button("✨ Generate Response"):
+st.markdown("")
+
+# -------------------------
+# GENERATE BUTTON
+# -------------------------
+if st.button("🚀 Generate Answer"):
 
     if topic.strip() == "":
         st.warning("⚠ Please enter a topic.")
@@ -116,37 +139,55 @@ if st.button("✨ Generate Response"):
         if option == "Explain Concept":
             prompt = f"""
 You are Dhanya – AI HR & Analytics Tutor.
-Explain '{topic}' in simple language for a beginner.
-Use one real-life analogy.
-Keep it short and clear.
+
+Explain '{topic}' in simple language suitable for a beginner.
+
+Use:
+- Simple explanation
+- One real-life analogy
+- Short and clear points
 """
 
         elif option == "Real-Life Example":
             prompt = f"""
 Give one real-life HR or business example of '{topic}'.
-Explain step by step in simple words.
+
+Explain it step by step using simple English.
 """
 
         elif option == "Generate Quiz":
             prompt = f"""
-Create 5 MCQs on '{topic}' with answers and explanations.
+Create 5 multiple-choice questions on '{topic}'.
+
+Include:
+- Four options
+- Correct answer
+- Short explanation
 """
 
         else:
             prompt = topic
 
         try:
-            with st.spinner("🤖 Dhanya is thinking..."):
+
+            with st.spinner("🤖 Dhanya is preparing your answer..."):
 
                 response = model.generate_content(prompt)
 
-            st.markdown("## 📖 Response")
-            st.write(response.text)
+            st.markdown("---")
+            st.subheader("💡 Dhanya's Response")
+
+            st.success(response.text)
 
         except Exception:
             st.error("❌ Something went wrong. Please check your API key or try again.")
 
+# -------------------------
+# FOOTER
+# -------------------------
 st.markdown("---")
-st.caption("💜 Developed by Dhanya | AI HR & Analytics Companion")
-      
+
+st.caption("💜 Developed by Dhanya")
+st.caption("🤖 Powered by Google Gemini AI")
+st.caption("© 2026 | AI HR & Analytics Companion")
        
