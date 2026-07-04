@@ -2,39 +2,114 @@ import streamlit as st
 import google.generativeai as genai
 
 # -------------------------
-# CONFIGURE GEMINI API
-# -------------------------
-genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
-
-model = genai.GenerativeModel("gemini-2.5-flash")
-
-# -------------------------
-# PAGE SETTINGS
+# PAGE SETTINGS (Must be first Streamlit command)
 # -------------------------
 st.set_page_config(
     page_title="Dhanya – AI HR & Analytics Companion",
-    page_icon="🎓"
-)
-
-st.title("Dhanya – Your Friendly AI HR & Analytics Companion")
-
-# -------------------------
-# USER INPUT
-# -------------------------
-topic = st.text_input("Enter a Topic")
-
-option = st.selectbox(
-    "Choose Activity",
-    ["Explain Concept", "Real-Life Example", "Generate Quiz", "Ask Anything"]
+    page_icon="🤖",
+    layout="wide"
 )
 
 # -------------------------
-# GENERATE BUTTON
+# CUSTOM CSS
 # -------------------------
-if st.button("Generate"):
+st.markdown("""
+<style>
+.main {
+    background-color: #F8F9FF;
+}
 
-    if topic == "":
-        st.warning("Please enter a topic.")
+.stButton>button {
+    width: 100%;
+    background-color: #6C63FF;
+    color: white;
+    border-radius: 10px;
+    height: 50px;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+}
+
+.stButton>button:hover {
+    background-color: #5A54E8;
+}
+
+div[data-testid="stTextInput"] input {
+    border-radius: 10px;
+}
+
+div[data-testid="stSelectbox"] {
+    border-radius: 10px;
+}
+
+.block-container {
+    padding-top: 2rem;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# -------------------------
+# CONFIGURE GEMINI API
+# -------------------------
+genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
+model = genai.GenerativeModel("gemini-2.5-flash")
+
+# -------------------------
+# SIDEBAR
+# -------------------------
+with st.sidebar:
+    st.title("🤖 Dhanya")
+    st.write("### AI HR & Analytics Companion")
+
+    st.markdown("---")
+
+    st.write("### 🌟 Features")
+    st.write("✅ Explain Concepts")
+    st.write("✅ Real-Life Examples")
+    st.write("✅ Quiz Generation")
+    st.write("✅ Ask Anything")
+
+    st.markdown("---")
+
+    st.info(
+        "💜 Dhanya is your friendly AI companion for learning HR, Analytics, "
+        "Interview Preparation, Resume Tips, and Career Guidance."
+    )
+
+# -------------------------
+# MAIN PAGE
+# -------------------------
+st.title("🤖 Dhanya – Your Friendly AI HR & Analytics Companion")
+
+st.success("👋 Welcome! Ask me anything about HR, Analytics, Business, Interviews, or Career Guidance.")
+
+st.markdown("---")
+
+# Two-column layout
+col1, col2 = st.columns(2)
+
+with col1:
+    topic = st.text_input(
+        "📘 Enter a Topic",
+        placeholder="Example: Recruitment, HR Analytics, SQL..."
+    )
+
+with col2:
+    option = st.selectbox(
+        "✨ Choose Activity",
+        [
+            "Explain Concept",
+            "Real-Life Example",
+            "Generate Quiz",
+            "Ask Anything"
+        ]
+    )
+
+# Generate button
+if st.button("✨ Generate Response"):
+
+    if topic.strip() == "":
+        st.warning("⚠ Please enter a topic.")
 
     else:
 
@@ -61,8 +136,17 @@ Create 5 MCQs on '{topic}' with answers and explanations.
             prompt = topic
 
         try:
-            response = model.generate_content(prompt)
+            with st.spinner("🤖 Dhanya is thinking..."):
+
+                response = model.generate_content(prompt)
+
+            st.markdown("## 📖 Response")
             st.write(response.text)
 
-        except Exception as e:
-            st.error("Something went wrong. Please check API key or try again.")
+        except Exception:
+            st.error("❌ Something went wrong. Please check your API key or try again.")
+
+st.markdown("---")
+st.caption("💜 Developed by Dhanya | AI HR & Analytics Companion")
+      
+       
