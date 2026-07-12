@@ -166,8 +166,7 @@ Include:
 """
 
         else:
-            prompt = topic
-
+           prompt = f"""
         try:
 
             with st.spinner("🤖 Dhanya is preparing your answer..."):
